@@ -3,7 +3,7 @@ LABEL owner="balaji"
 LABEL version="1.0"
 ARG VERSION="1.2.9"
 RUN apt update 
-RUN apt install nginx unzip jq curl wget
+RUN apt install -y nginx unzip jq curl wget
 COPY index.html /var/www/html/index.nginx-debian.html
 COPY style.css /var/www/html/style.css
 COPY scorekeeper.js /var/www/html/scorekeeper.js
