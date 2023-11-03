@@ -1,0 +1,36 @@
+pipeline{
+    environment{
+        registry = 'Balaji'
+        dockerhost = '3.83.164.112'
+        dockerimage = ''
+    }
+    stage('clone our git'){
+        steps{
+            git 'https://github.com/Balu1plus6/docker_new.git'
+        }
+    }
+    stage('build docker image'){
+        script{
+            dockerimage = docker.build registry + ":v$Buildnumber"
+        }
+    }
+    stage('Push Image To DockerHUB') {
+            steps {
+                script {
+                    docker.withRegistry( '', registryCredential ) {
+                        dockerImage.push()
+                    }
+                }
+            }
+        }
+        stage('Cleaning up') {
+            steps {
+                sh "docker rmi $registry:v$BUILD_NUMBER"
+            }
+        }
+    stage ('Verifying The Deployment') {
+            steps {
+                sh 'curl http://$dockerhost:8000 || exit 1'
+                }
+        }
+}
